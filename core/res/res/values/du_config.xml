@@ -88,7 +88,7 @@
     <bool name="config_ledCanPulse">false</bool>
 
     <!-- Button brightness -->
-    <integer name="config_buttonBrightnessSettingDefault">255</integer>
-    <bool name="config_deviceHasVariableButtonBrightness">false</bool>
+    <bool name="config_button_brightness_support">false</bool>
+    <integer name="config_button_brightness_default">128</integer>
 
 </resources>
