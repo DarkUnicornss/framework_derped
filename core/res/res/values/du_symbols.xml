@@ -77,6 +77,7 @@
   <!-- LED pulse -->
   <java-symbol type="bool" name="config_ledCanPulse" />
 
+  <!-- DUI -->
   <java-symbol type="anim" name="du_app_in" />
   <java-symbol type="anim" name="du_app_out" />
 
@@ -86,4 +87,9 @@
 
   <!-- Hardware key binding -->
   <java-symbol type="integer" name="config_deviceHardwareKeys" />
+
+  <!-- Button brightness -->
+  <java-symbol type="bool" name="config_button_brightness_support" />
+  <java-symbol type="integer" name="config_button_brightness_default" />
+
 </resources>
