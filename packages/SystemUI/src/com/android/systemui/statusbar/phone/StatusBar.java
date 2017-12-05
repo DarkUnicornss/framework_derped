@@ -5681,39 +5681,32 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.QS_TILE_TITLE_VISIBILITY),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN),
-                    false, this, UserHandle.USER_ALL);
-            update();
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.SHOW_FOURG))) {
-                    mShow4G = Settings.System.getIntForUser(
-                            mContext.getContentResolver(),
-                            Settings.System.SHOW_FOURG,
-                            0, UserHandle.USER_CURRENT) == 1;
-                            mCommandQueue.restartUI();
-                            updateRowStates();
-                            updateClearAll();
-                            updateEmptyShadeView();
-            } else  if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.DOUBLE_TAP_SLEEP_NAVBAR))) {
-                    setDoubleTapNavbar();
+                    Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN))) {
+                setStatusBarWindowViewOptions();
             } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN))) {
-                setLockscreenDoubleTapToSleep();
+                    Settings.System.HEADS_UP_BLACKLIST_VALUES))) {
+                final String blackString = Settings.System.getString(mContext.getContentResolver(),
+                        Settings.System.HEADS_UP_BLACKLIST_VALUES);
+                splitAndAddToArrayList(mBlacklist, blackString, "\\|");
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_SHOW_TICKER))) {
+                updateTickerSettings();
+                initTickerView();
+            } else if (uri.equals(Settings.Secure.getUriFor(
+                    Settings.Secure.QS_TILE_TITLE_VISIBILITY))) {
             }
         }
 
         public void update() {
-            ContentResolver resolver = mContext.getContentResolver();
-            boolean mShow4G = Settings.System.getIntForUser(resolver,
-                    Settings.System.SHOW_FOURG, 0, UserHandle.USER_CURRENT) == 1;
-            setDoubleTapNavbar();
-            setLockscreenDoubleTapToSleep();
+            setStatusBarWindowViewOptions();
+            setHeadsUpBlacklist();
+            updateTickerSettings();
+            setQsLayoutColumns();
         }
     }
 
@@ -5729,11 +5722,36 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     }
 
-    private void setLockscreenDoubleTapToSleep() {
-        if (mStatusBarWindow != null) {
-            mStatusBarWindow.setLockscreenDoubleTapToSleep();
-        }
+    private void setHeadsUpBlacklist() {
+        final String blackString = Settings.System.getString(mContext.getContentResolver(),
+                    Settings.System.HEADS_UP_BLACKLIST_VALUES);
+        splitAndAddToArrayList(mBlacklist, blackString, "\\|");
     }
+
+    private void updateTickerSettings() {
+        mTickerEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_SHOW_TICKER, 0,
+                UserHandle.USER_CURRENT);
+    }
+
+    protected final ContentObserver mNavbarObserver = new ContentObserver(mHandler) {
+        @Override
+        public void onChange(boolean selfChange) {
+            boolean showing = Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Secure.NAVIGATION_BAR_VISIBLE,
+                    DUActionUtils.hasNavbarByDefault(mContext) ? 1 : 0) != 0;
+            if (!showing && mNavigationBar != null && mNavigationBarView != null) {
+                removeNavigationBar();
+            } else if (showing && mNavigationBar == null && mNavigationBarView == null) {
+                createNavigationBar();
+            }
+            if (!DUActionUtils.hasNavbarByDefault(mContext)) {
+                Intent intent = new Intent("com.cyanogenmod.action.UserChanged");
+                intent.setPackage("com.android.settings");
+                mContext.sendBroadcastAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+            }
+        }
+    };
 
     private RemoteViews.OnClickHandler mOnClickHandler = new RemoteViews.OnClickHandler() {
 
