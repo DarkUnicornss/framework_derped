@@ -16,6 +16,10 @@
 
 package com.android.internal.util.du;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.res.Resources;
+import android.content.Intent;
 import android.os.UserHandle;
 import android.Manifest;
 import android.content.Context;
@@ -25,7 +29,11 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
+import android.hardware.input.InputManager;
+import android.view.InputDevice;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
+import android.view.WindowManager;
 import com.android.internal.R;
 
 public class Utils {
