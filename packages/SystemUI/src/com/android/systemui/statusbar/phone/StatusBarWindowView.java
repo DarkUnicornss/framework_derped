@@ -78,7 +78,7 @@ public class StatusBarWindowView extends FrameLayout {
 
     private int mRightInset = 0;
     private int mLeftInset = 0;
-
+    private int qsQuickPulldownValue;
     private StatusBar mService;
     private final Paint mTransparentSrcPaint = new Paint();
     private FalsingManager mFalsingManager;
@@ -745,8 +745,6 @@ public class StatusBarWindowView extends FrameLayout {
         if (mNotificationPanel != null) {
             mNotificationPanel.setLockscreenDoubleTapToSleep(isDoubleTapEnabled);
         }
-    }
-}
 
         if (mNotificationPanel != null) {
             mNotificationPanel.setQsQuickPulldown(qsQuickPulldownValue);

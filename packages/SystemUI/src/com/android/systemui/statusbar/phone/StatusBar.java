@@ -895,8 +895,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mLockscreenSettingsObserver,
                 UserHandle.USER_ALL);
 
-        mContext.getContentResolver().registerContentObserver(Settings.Secure.getUriFor(
-                Settings.Secure.NAVIGATION_BAR_VISIBLE), false, mNavbarObserver, UserHandle.USER_ALL);
+//        mContext.getContentResolver().registerContentObserver(Settings.Secure.getUriFor(
+  //              Settings.Secure.NAVIGATION_BAR_VISIBLE), false, mNavbarObserver, UserHandle.USER_ALL);
 
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
@@ -1092,7 +1092,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     mStatusBarView.setPanel(mNotificationPanel);
                     mStatusBarView.setScrimController(mScrimController);
                     mStatusBarContent = (LinearLayout) mStatusBarView.findViewById(R.id.status_bar_contents);
-                    updateTickerSettings();
                     initTickerView();
                     setAreThereNotifications();
                     checkBarModes();
@@ -5690,19 +5689,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.SHOW_FOURG))) {
-                    mShow4G = Settings.System.getIntForUser(
-                            mContext.getContentResolver(),
-                            Settings.System.SHOW_FOURG,
-                            0, UserHandle.USER_CURRENT) == 1;
-                            mCommandQueue.restartUI();
-                            updateRowStates();
-                            updateClearAll();
-                            updateEmptyShadeView();
-            } else  if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.DOUBLE_TAP_SLEEP_NAVBAR))) {
-                    setDoubleTapNavbar();
-            } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN))) {
                 setLockscreenDoubleTapToSleep();
             }
@@ -5710,9 +5696,6 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
-            boolean mShow4G = Settings.System.getIntForUser(resolver,
-                    Settings.System.SHOW_FOURG, 0, UserHandle.USER_CURRENT) == 1;
-            setDoubleTapNavbar();
             setLockscreenDoubleTapToSleep();
         }
     }
@@ -5723,11 +5706,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 Settings.Secure.QS_LAYOUT_COLUMNS, 3, mCurrentUserId);
     }
 
-    private void setStatusBarWindowViewOptions() {
-        if (mStatusBarWindow != null) {
-            mStatusBarWindow.setStatusBarWindowViewOptions();
-        }
-    }
+//    private void setStatusBarWindowViewOptions() {
+  //      if (mStatusBarWindow != null) {
+    //        mStatusBarWindow.setStatusBarWindowViewOptions();
+      //  }
+   // }
 
     private void setLockscreenDoubleTapToSleep() {
         if (mStatusBarWindow != null) {

@@ -27,8 +27,18 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.android.internal.R;
+import android.os.SystemClock;
+import android.os.PowerManager;
+
 
 public class Utils {
+
+    public static void switchScreenOff(Context ctx) {
+        PowerManager pm = (PowerManager) ctx.getSystemService(Context.POWER_SERVICE);
+        if (pm!= null) {
+            pm.goToSleep(SystemClock.uptimeMillis());
+        }
+    }
 
     // Check to see if Wifi is connected
     public static boolean isWifiConnected(Context context) {
